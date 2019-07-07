@@ -1,0 +1,10 @@
+<div>
+  <b>{{ formula.name }} ( {{ formula.abbreviation }} )</b>
+  <br>
+
+  <input *ngFor="let childFormula of formula.childFormulas"
+         type="text"
+         placeholder="{{ childFormula.name }}"/>
+
+  <button class="btn btn-primary">Calculate</button>
+</div>

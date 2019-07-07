@@ -1,0 +1,24 @@
+<!--<nav class="navbar navbar-default bg-danger">-->
+<nav class="navbar navbar-expand-sm bg-primary navbar-dark">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">My Formulas Logo</a>
+    </div>
+    <ul class="navbar-nav li-no-bullets">
+
+      <form class="navbar-form navbar-left" action="">
+        <div>
+          <input type="text" class="form-control" placeholder="Search">
+        </div>
+      </form>
+
+      <li class="nav-item" *ngIf="isSignedIn">
+        <a class="nav-link" href="#">My Name Here</a>
+      </li>
+      <li class="nav-item" *ngIf="! isSignedIn">
+        <a class="nav-link" href="#">Sign In</a>
+      </li>
+
+    </ul>
+  </div>
+</nav>

@@ -1,0 +1,24 @@
+.li-no-bullets {
+  list-style-type: none;
+}
+
+@media (min-width: 768px) {
+  .navbar-left {
+    float: left!important;
+  }
+
+  .navbar-header {
+    float: left;
+  }
+
+  .navbar-form {
+    width: auto;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-right: 0;
+    margin-left: 0;
+    border: 0;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
+}

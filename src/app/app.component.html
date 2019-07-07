@@ -1,0 +1,8 @@
+<app-nav-bar></app-nav-bar>
+
+<div class="app-component" *ngIf="formulas">
+  <app-formula *ngFor="let formula of formulas"
+               [formula]="formula">
+  </app-formula>
+</div>
+

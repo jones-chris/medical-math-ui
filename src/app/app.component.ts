@@ -15,43 +15,17 @@ export class AppComponent implements OnInit {
   formulas: Formula[];
 
   constructor(private formulaService: FormulaService) {
-    console.log('In App constructor');
-    console.log(this.formulas);
   }
 
   ngOnInit() {
-    console.log('In App ngOnit');
-    console.log('Before getting formulas, the formulas are: ' + this.formulas);
     this.getFormulas();
-    console.log('After getting formulas, the formulas are: ' + this.formulas);
   }
 
   getFormulas() {
-    // this.formulaService.getFormulas()
-    //   .subscribe(formulas => {
-    //     this.formulas = formulas;
-    //   });
-
-    // this.formulaService.getFormulas()
-    //   .then(formulas => {
-    //     this.formulas = formulas;
-    //   });
-
     this.formulaService.getFormulas()
       .subscribe(formulas => {
         this.formulas = formulas;
         console.log(formulas);
       });
-
-    // this.formulaService.getFormulas()
-    //   .subscribe(formulas => {
-    //     this.formulas = formulas;
-    //   });
-
-      // .toPromise()
-      // .then(data => this.formulas = data);
-
-    // this.formulaService.getFormulas()
-    //   .then(formulas => this.formulas = formulas);
   }
 }

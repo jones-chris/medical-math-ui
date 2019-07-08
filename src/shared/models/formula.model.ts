@@ -6,6 +6,8 @@ export class Formula {
   abbreviation: string;
   parentId: number;
   hasChildren: boolean;
+  function: string; //todo:  add this to database as a field.
+  value: number;
 
   constructor(id: number,
               name: string,

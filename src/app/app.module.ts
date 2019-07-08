@@ -2,6 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import { MatIconModule } from '@angular/material';
 
 import { FormulaService } from '../shared/services/formula.service';
 
@@ -18,7 +19,8 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
   imports: [
     BrowserModule,
     HttpModule,
-    FormsModule
+    FormsModule,
+    MatIconModule
   ],
   providers: [
   	FormulaService

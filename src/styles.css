@@ -4,3 +4,22 @@
   border-color: #e7e7e7;
 }
 
+div {
+  text-align: center;
+}
+
+html, body {
+  width: 100%;
+}
+table {
+  margin: 0 auto;
+}
+
+input {
+  margin-left: 10%;
+}
+
+td {
+  padding-right: 7%;
+  padding-bottom: 10%;
+}

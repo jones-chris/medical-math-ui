@@ -3,12 +3,20 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { MatIconModule } from '@angular/material';
+import { RouterModule, Routes } from '@angular/router';
 
 import { FormulaService } from '../shared/services/formula.service';
 
 import { AppComponent } from './app.component';
 import { FormulaComponent } from './formula/formula.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
+
+const routes: Routes = [
+  {
+    path: 'formulas/:id',
+    component: FormulaComponent
+  }
+];
 
 @NgModule({
   declarations: [
@@ -20,13 +28,14 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
     BrowserModule,
     HttpModule,
     FormsModule,
-    MatIconModule
+    MatIconModule,
+    RouterModule.forRoot(routes)
   ],
   providers: [
   	FormulaService
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { 
+export class AppModule {
 	
 }

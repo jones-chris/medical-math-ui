@@ -1,31 +1,39 @@
 <div>
-  <!--Get reference to upward formula from prior url path-->
 
-  <b>{{ formula.name }} ( {{ formula.abbreviation }} )</b>
+  <!--First, if the child formula has a parent-->
+  <mat-icon *ngIf="formula.parentId"
+            (click)="navigateToParentFormula()"
+            class="cursor-pointer upward-arrow">
+    arrow_upward
+  </mat-icon>
+
   <br>
 
-  <div *ngFor="let childFormula of formula.childFormulas">
-    <input formula-eligible="true"
-           id="{{ childFormula.id }}"
-           type="number"
-           placeholder="{{ childFormula.name }}"
-           [(ngModel)]="childFormula.value"
-    />
+  <b class="formula-name">{{ formula.name }} ( {{ formula.abbreviation }} )</b>
 
-    <!--This can be used for dev to check that 2-way data binding is working-->
-    <!--<p>Value:  {{ childFormula.value }}</p>-->
+  <br>
 
-    <!--First, if the child formula has a parent-->
-    <mat-icon *ngIf="childFormula.parentId !== formula.id">
-      arrow_upward
-    </mat-icon>
+  <p [hidden]="hideResult">Result:  {{ result }}</p>
+  <p [hidden]="!errorMessage">{{ errorMessage }}</p>
 
-    <!--Second, if the child formula also has children, then display down arrow.-->
-    <mat-icon *ngIf="childFormula.hasChildren">
-      arrow_downward
-    </mat-icon>
-
-  </div>
+  <table>
+    <tr *ngFor="let childFormula of formula.childFormulas">
+      <td>
+        {{ childFormula.name }}
+      </td>
+      <td>
+        <input id="{{ childFormula.id }}"
+               type="number"
+               [(ngModel)]="childFormula.value"
+        />
+      </td>
+      <td>
+        <mat-icon *ngIf="childFormula.hasChildren">
+          arrow_downward
+        </mat-icon>
+      </td>
+    </tr>
+  </table>
 
   <button class="btn btn-primary" (click)="calculate()">Calculate</button>
 

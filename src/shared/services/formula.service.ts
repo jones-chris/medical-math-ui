@@ -16,4 +16,9 @@ export class FormulaService {
       .pipe(map(response => response.json()));
   }
 
+  getChildFormulas(formulaId: number) {
+    return this.http.get(this.url + '/' + formulaId)
+      .pipe(map(response => response.json()));
+  }
+
 }

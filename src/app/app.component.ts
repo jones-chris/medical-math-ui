@@ -28,4 +28,9 @@ export class AppComponent implements OnInit {
         console.log(formulas);
       });
   }
+
+  hideFormulaCards(hide: boolean) {
+    document.getElementById('formula-cards').hidden = hide;
+  }
+
 }

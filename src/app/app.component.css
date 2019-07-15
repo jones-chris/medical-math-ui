@@ -1,3 +1,21 @@
 .app-component {
   clear: both;
 }
+
+mat-card {
+  padding-top: 0;
+  padding-left: 0;
+  padding-right: 0;
+  margin: 2em;
+  border: 1px solid;
+  box-shadow: -1px 1px #77aaff,
+              -2px 2px #77aaff,
+              -3px 3px #77aaff,
+              -4px 4px #77aaff,
+              -5px 5px #77aaff;
+}
+
+mat-card-title {
+  background:rgba(0,0,0,.06);
+  padding:20px 20px;
+}

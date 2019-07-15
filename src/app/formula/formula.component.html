@@ -2,7 +2,7 @@
 
   <!--First, if the child formula has a parent-->
   <mat-icon *ngIf="formula.parentId"
-            (click)="navigateToParentFormula()"
+            (click)="navigateToParentFormula(formula.parentId)"
             class="cursor-pointer upward-arrow">
     arrow_upward
   </mat-icon>
@@ -13,7 +13,15 @@
 
   <br>
 
-  <p [hidden]="hideResult">Result:  {{ result }}</p>
+  <p [hidden]="hideResult"
+     id="result">
+    Result:  {{ result }}
+    <mat-icon class="copy-icon cursor-pointer"
+              (click)="copyResultToClipboard()">
+      file_copy
+    </mat-icon>
+  </p>
+
   <p [hidden]="!errorMessage">{{ errorMessage }}</p>
 
   <table>
@@ -28,13 +36,17 @@
         />
       </td>
       <td>
-        <mat-icon *ngIf="childFormula.hasChildren">
+        <mat-icon *ngIf="childFormula.hasChildren"
+                  (click)="navigateToChildFormula(childFormula.id)"
+                  class="cursor-pointer">
           arrow_downward
         </mat-icon>
       </td>
     </tr>
   </table>
 
-  <button class="btn btn-primary" (click)="calculate()">Calculate</button>
+  <button class="btn btn-primary"
+          (click)="calculate(); navigateToParentFormula(formula.parentId)"
+          >Calculate</button>
 
 </div>

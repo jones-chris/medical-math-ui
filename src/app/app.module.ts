@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { MatIconModule } from '@angular/material';
+import {MatCardModule} from '@angular/material';
 import { RouterModule, Routes } from '@angular/router';
 
 import { FormulaService } from '../shared/services/formula.service';
@@ -29,7 +30,8 @@ const routes: Routes = [
     HttpModule,
     FormsModule,
     MatIconModule,
-    RouterModule.forRoot(routes)
+    RouterModule.forRoot(routes),
+    MatCardModule
   ],
   providers: [
   	FormulaService

@@ -5,12 +5,11 @@ import { HttpModule } from '@angular/http';
 import { MatIconModule } from '@angular/material';
 import {MatCardModule} from '@angular/material';
 import { RouterModule, Routes } from '@angular/router';
-
 import { FormulaService } from '../shared/services/formula.service';
-
 import { AppComponent } from './app.component';
 import { FormulaComponent } from './formula/formula.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
+import { ClipboardModule } from 'ngx-clipboard';
 
 const routes: Routes = [
   {
@@ -31,7 +30,8 @@ const routes: Routes = [
     FormsModule,
     MatIconModule,
     RouterModule.forRoot(routes),
-    MatCardModule
+    MatCardModule,
+    ClipboardModule
   ],
   providers: [
   	FormulaService

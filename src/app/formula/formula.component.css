@@ -14,3 +14,11 @@
 .copy-icon {
   font-size: medium;
 }
+
+/*.result {*/
+  /*display: inline-flex;*/
+/*}*/
+
+.copy-to-clipboard {
+  color: blue;
+}

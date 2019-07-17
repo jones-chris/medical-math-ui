@@ -13,14 +13,22 @@
 
   <br>
 
-  <p [hidden]="hideResult"
-     id="result">
-    Result:  {{ result }}
-    <mat-icon class="copy-icon cursor-pointer"
-              (click)="copyResultToClipboard()">
-      file_copy
-    </mat-icon>
-  </p>
+  <div>
+    <p [hidden]="hideResult"
+       id="result">
+      Result:  {{ result }}
+
+      <mat-icon class="copy-icon cursor-pointer"
+                (click)="copyResultToClipboard()">
+        file_copy
+      </mat-icon>
+    </p>
+
+    <p [hidden]="hideCopyMessage"
+       class="copy-to-clipboard">
+      Copied to Clipboard!
+    </p>
+  </div>
 
   <p [hidden]="!errorMessage">{{ errorMessage }}</p>
 
@@ -46,7 +54,8 @@
   </table>
 
   <button class="btn btn-primary"
-          (click)="calculate(); navigateToParentFormula(formula.parentId)"
-          >Calculate</button>
+          (click)="calculate(); navigateToParentFormula(formula.parentId)">
+    Calculate
+  </button>
 
 </div>

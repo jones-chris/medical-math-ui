@@ -1,24 +1,27 @@
-import {Component, Input, OnChanges, OnInit} from '@angular/core';
+import {Component, OnChanges, OnInit} from '@angular/core';
 import {Formula} from '../../shared/models/formula.model';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppComponent} from '../app.component';
 import {FormulaService} from '../../shared/services/formula.service';
+import {ClipboardService} from 'ngx-clipboard';
 
 @Component({
   selector: 'app-formula',
   templateUrl: './formula.component.html',
   styleUrls: ['./formula.component.css']
 })
-export class FormulaComponent implements OnInit, OnChanges {
+export class FormulaComponent implements OnInit {
   private formula: Formula;
   private hideResult = true;
+  private hideCopyMessage = true;
   private result: number;
   private errorMessage: string;
 
   constructor(private activeRouter: ActivatedRoute,
               private router: Router,
               private refAppComponent: AppComponent,
-              private formulaService: FormulaService) {
+              private formulaService: FormulaService,
+              private clipboardService: ClipboardService) {
     console.log(this.formula);
   }
 
@@ -27,6 +30,7 @@ export class FormulaComponent implements OnInit, OnChanges {
       const formulaJson = queryParams.formula;
       this.formula = JSON.parse(formulaJson) as Formula;
       this.hideResult = true;
+      this.hideCopyMessage = true;
     });
 
     // first check if child formulas exist in refAppComponent
@@ -38,9 +42,6 @@ export class FormulaComponent implements OnInit, OnChanges {
     } else {
       this.getChildFormulasFromService(this.formula.id);
     }
-  }
-
-  ngOnChanges() {
   }
 
   calculate() {
@@ -79,7 +80,7 @@ export class FormulaComponent implements OnInit, OnChanges {
       // Only call service when going DOWN formula tree, NOT UP.
       this.formula.childFormulas = this.getFormulasByParentIdFromParentComponent(parentFormulaId);
 
-      this.hideResult = true;
+      this.hideUiMessages();
     }
   }
 
@@ -96,13 +97,12 @@ export class FormulaComponent implements OnInit, OnChanges {
       }
     }
 
-    this.hideResult = true;
+    this.hideUiMessages();
   }
 
   copyResultToClipboard() {
-    const resultEl = document.getElementById('result');
-    resultEl.select();
-    document.execCommand('copy');
+    this.clipboardService.copyFromContent(this.result.toString());
+    this.hideCopyMessage = false;
   }
 
   private getChildFormulasFromService(formulaId: number) {
@@ -149,6 +149,11 @@ export class FormulaComponent implements OnInit, OnChanges {
     }
 
     return childFormulas;
+  }
+
+  private hideUiMessages() {
+    this.hideResult = true;
+    this.hideCopyMessage = true;
   }
 
 }

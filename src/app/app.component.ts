@@ -1,8 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-
 import { FormulaService } from '../shared/services/formula.service';
-
-import { Formula } from '../shared/models/formula.model';
 
 
 @Component({
@@ -11,26 +8,19 @@ import { Formula } from '../shared/models/formula.model';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  title = 'medical-math-ui';
-  formulas: Formula[];
-
-  constructor(private formulaService: FormulaService) {
-  }
+  constructor(private formulaService: FormulaService) {}
 
   ngOnInit() {
-    this.getFormulas();
+    if (this.formulaService.formulas.length === 0) {
+      this.getFormulas();
+    }
   }
 
   getFormulas() {
     this.formulaService.getFormulas()
       .subscribe(formulas => {
-        this.formulas = formulas;
-        console.log(formulas);
+        this.formulaService.formulas = formulas;
+        console.log('Initial formulas are:  ' + formulas);
       });
   }
-
-  hideFormulaCards(hide: boolean) {
-    document.getElementById('formula-cards').hidden = hide;
-  }
-
 }

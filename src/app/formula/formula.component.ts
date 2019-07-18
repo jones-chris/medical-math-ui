@@ -1,4 +1,4 @@
-import {Component, OnChanges, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Formula} from '../../shared/models/formula.model';
 import {ActivatedRoute, Router} from '@angular/router';
 import {AppComponent} from '../app.component';
@@ -19,10 +19,12 @@ export class FormulaComponent implements OnInit {
 
   constructor(private activeRouter: ActivatedRoute,
               private router: Router,
-              private refAppComponent: AppComponent,
+              private _refAppComponent: AppComponent,
               private formulaService: FormulaService,
-              private clipboardService: ClipboardService) {
-    console.log(this.formula);
+              private clipboardService: ClipboardService) {}
+
+  get refAppComponent(): AppComponent {
+    return this._refAppComponent;
   }
 
   ngOnInit() {
@@ -36,11 +38,11 @@ export class FormulaComponent implements OnInit {
     // first check if child formulas exist in refAppComponent
     // if yes, then assign to formula.childFormulas
     // if no, then get from flask api and update the master list of formulas in refAppComponent
-    const childFormulas = this.getChildFormulasByParentIdFromParentComponent(this.formula.id);
+    const childFormulas = this.formulaService.getChildFormulasByParentId(this.formula.id);
     if (childFormulas.length > 0) {
       this.formula.childFormulas = childFormulas;
     } else {
-      this.getChildFormulasFromService(this.formula.id);
+      this.getChildFormulas(this.formula.id);
     }
   }
 
@@ -75,25 +77,26 @@ export class FormulaComponent implements OnInit {
 
   navigateToParentFormula(parentFormulaId: number) {
     if (parentFormulaId) {
-      this.formula = this.refAppComponent.formulas.find((formula) => formula.id === parentFormulaId);
+      // this.formula = this.refAppComponent.formulas.find((formula) => formula.id === parentFormulaId);
+      this.formula = this.formulaService.formulas.find((formula) => formula.id === parentFormulaId);
 
       // Only call service when going DOWN formula tree, NOT UP.
-      this.formula.childFormulas = this.getFormulasByParentIdFromParentComponent(parentFormulaId);
+      this.formula.childFormulas = this.formulaService.getChildFormulasByParentId(parentFormulaId);
 
       this.hideUiMessages();
     }
   }
 
   navigateToChildFormula(formulaId: number) {
-    this.formula = this.getChildFormulaByIdFromParentComponent(formulaId);
+    this.formula = this.formulaService.getChildFormulaById(formulaId);
     if (this.formula.hasChildren) {
       // first try getting child formulas form refAppComponent
-      this.formula.childFormulas = this.getChildFormulasByParentIdFromParentComponent(formulaId);
+      this.formula.childFormulas = this.formulaService.getChildFormulasByParentId(formulaId);
 
       // if no child formulas found locally, then get them from the service (we know there should be at least 1 child because hasChildren
       // is true.
       if (this.formula.childFormulas.length === 0) {
-        this.getChildFormulasFromService(formulaId);
+        this.getChildFormulas(formulaId);
       }
     }
 
@@ -105,7 +108,7 @@ export class FormulaComponent implements OnInit {
     this.hideCopyMessage = false;
   }
 
-  private getChildFormulasFromService(formulaId: number) {
+  private getChildFormulas(formulaId: number) {
     this.formulaService.getChildFormulas(formulaId)
       .subscribe(childFormulas => {
 
@@ -113,42 +116,11 @@ export class FormulaComponent implements OnInit {
         this.formula.childFormulas = childFormulas;
 
         // Update master list of formulas
-        childFormulas.forEach((childFormula) => this.refAppComponent.formulas.push(childFormula));
+        childFormulas.forEach((childFormula) => this.formulaService.formulas.push(childFormula));
 
         // console.log('Child Formulas:  ' + childFormulas);
         // console.log('AppComponent Formulas:  ' + JSON.stringify(this.refAppComponent.formulas));
       });
-  }
-
-  private getFormulasByParentIdFromParentComponent(parentFormulaId: number): Formula[] {
-    const childFormulas = [];
-
-    for (const formula of this.refAppComponent.formulas) {
-      if (formula.parentId === parentFormulaId) {
-        childFormulas.push(formula);
-      }
-    }
-
-    return childFormulas;
-  }
-
-  private getChildFormulaByIdFromParentComponent(formulaId: number): Formula {
-    for (const formula of this.refAppComponent.formulas) {
-      if (formula.id === formulaId) {
-        return formula;
-      }
-    }
-  }
-
-  private getChildFormulasByParentIdFromParentComponent(formulaId: number): Formula[] {
-    const childFormulas = [];
-    for (const formula of this.refAppComponent.formulas) {
-      if (formula.parentId === formulaId) {
-        childFormulas.push(formula);
-      }
-    }
-
-    return childFormulas;
   }
 
   private hideUiMessages() {

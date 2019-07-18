@@ -10,11 +10,16 @@ import { AppComponent } from './app.component';
 import { FormulaComponent } from './formula/formula.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { ClipboardModule } from 'ngx-clipboard';
+import {ToggleFormulaCardsDirective} from '../shared/directives/toggle.formula.cards';
+import {BreadcrumbModule} from 'angular-crumbs';
 
 const routes: Routes = [
   {
     path: 'formulas/:id',
-    component: FormulaComponent
+    component: FormulaComponent,
+    data: {
+      breadcrumb: 'Formula'
+    }
   }
 ];
 
@@ -22,7 +27,8 @@ const routes: Routes = [
   declarations: [
     AppComponent,
     FormulaComponent,
-    NavBarComponent
+    NavBarComponent,
+    ToggleFormulaCardsDirective
   ],
   imports: [
     BrowserModule,
@@ -31,7 +37,8 @@ const routes: Routes = [
     MatIconModule,
     RouterModule.forRoot(routes),
     MatCardModule,
-    ClipboardModule
+    ClipboardModule,
+    BreadcrumbModule
   ],
   providers: [
   	FormulaService

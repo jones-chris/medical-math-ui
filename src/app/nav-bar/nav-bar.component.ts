@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-nav-bar',
@@ -8,7 +9,8 @@ import { Component, OnInit } from '@angular/core';
 export class NavBarComponent implements OnInit {
   isSignedIn = false;
 
-  constructor() {
+  constructor(private activeRouter: ActivatedRoute,
+              private router: Router) {
   }
 
   ngOnInit() {

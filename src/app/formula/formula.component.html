@@ -1,5 +1,15 @@
 <div>
 
+  <br>
+
+  <button routerLink="/"
+          class="btn btn-success"
+          [appHideFormulaCards]="false">
+    Main Page
+  </button>
+
+  <br>
+
   <!--First, if the child formula has a parent-->
   <mat-icon *ngIf="formula.parentId"
             (click)="navigateToParentFormula(formula.parentId)"

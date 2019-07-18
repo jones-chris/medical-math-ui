@@ -1,21 +1,23 @@
 <app-nav-bar></app-nav-bar>
 
-<div id="formula-cards" class="app-component" *ngIf="formulas">
-  <!--<app-formula *ngFor="let formula of formulas"-->
-               <!--[formula]="formula">-->
-  <!--</app-formula>-->
-  <mat-card *ngFor="let formula of formulas">
-    <mat-card-title>{{ formula.name }}</mat-card-title>
-    <mat-card-content>A description of the formula</mat-card-content>
-    <mat-card-actions>
-      <button class="btn btn-primary"
-              routerLink="/formulas/{{ formula.id }}"
-              [queryParams]="{formula:formula | json}"
-              (click)="hideFormulaCards(true)">View</button>
-      <!--<button class="btn btn-primary" (click)="navigateToFormulaUrl(formula.id)">View</button>-->
-    </mat-card-actions>
+<breadcrumb></breadcrumb>
 
-  </mat-card>
+<div id="formula-cards" class="app-component" *ngIf="formulaService.formulas">
+  <ng-container *ngFor="let formula of formulaService.formulas">
+    <mat-card *ngIf="formula.hasChildren">
+      <mat-card-title>{{ formula.name }}</mat-card-title>
+      <mat-card-content>A description of the formula</mat-card-content>
+      <mat-card-actions>
+        <button class="btn btn-primary"
+                routerLink="/formulas/{{ formula.id }}"
+                [queryParams]="{formula:formula | json}"
+                [skipLocationChange]="true"
+                [appHideFormulaCards]="true">
+          View
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </ng-container>
 </div>
 
 <router-outlet></router-outlet>

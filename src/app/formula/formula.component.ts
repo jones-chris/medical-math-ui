@@ -1,9 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {Formula} from '../../shared/models/formula.model';
-import {ActivatedRoute, Router} from '@angular/router';
+import {ActivatedRoute, NavigationStart, Router} from '@angular/router';
 import {AppComponent} from '../app.component';
 import {FormulaService} from '../../shared/services/formula.service';
 import {ClipboardService} from 'ngx-clipboard';
+import {BreadcrumbService} from '../../shared/services/breadcrumb.service';
 
 @Component({
   selector: 'app-formula',
@@ -21,6 +22,7 @@ export class FormulaComponent implements OnInit {
               private router: Router,
               private _refAppComponent: AppComponent,
               private formulaService: FormulaService,
+              private breadcrumbService: BreadcrumbService,
               private clipboardService: ClipboardService) {}
 
   get refAppComponent(): AppComponent {
@@ -28,6 +30,27 @@ export class FormulaComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log('Inside ngOnInit for formula component');
+
+    // This is only called the first time the FormulaComponent is created.
+    const formulaId = this.getFormulaIdFromRoute();
+    this.updateBreadcrumbs(formulaId);
+
+    // This is called AFTER the first time the FormulaComponent is created AND the route changes.
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationStart) {
+        if (event.url.indexOf('formulas') !== 1) {
+          return;
+        }
+
+        const id = this.getFormulaIdFromRoute();
+        this.updateBreadcrumbs(id);
+      }
+    });
+
+    // const id = this.activeRouter.snapshot.params['id'];
+    // console.log('Formula id = ' + id);
+
     this.activeRouter.queryParams.subscribe(queryParams => {
       const formulaJson = queryParams.formula;
       this.formula = JSON.parse(formulaJson) as Formula;
@@ -84,6 +107,7 @@ export class FormulaComponent implements OnInit {
       this.formula.childFormulas = this.formulaService.getChildFormulasByParentId(parentFormulaId);
 
       this.hideUiMessages();
+      this.updateBreadcrumbs(this.formula.id);
     }
   }
 
@@ -101,6 +125,7 @@ export class FormulaComponent implements OnInit {
     }
 
     this.hideUiMessages();
+    this.updateBreadcrumbs(this.formula.id);
   }
 
   copyResultToClipboard() {
@@ -126,6 +151,27 @@ export class FormulaComponent implements OnInit {
   private hideUiMessages() {
     this.hideResult = true;
     this.hideCopyMessage = true;
+  }
+
+  private updateBreadcrumbs(formulaId: number) {
+    // get name of formula based on param id from formula service
+    const formula = this.formulaService.formulas.find(aFormula => aFormula.id === +formulaId);
+
+    // find index of breadcrumb in array.
+    const breadcrumbIndex = this.breadcrumbService.breadcrumbs.findIndex(crumb => crumb === formula.name);
+
+    // if not found, add id to end of array.
+    // if found, then remove all elements from array after (not including) the index.
+    if (breadcrumbIndex === -1) {
+      // it's safe to assume the formula will be found, because we wouldn't be in the route if the formula didn't exist.
+      this.breadcrumbService.breadcrumbs.push(formula.name);
+    } else {
+      this.breadcrumbService.breadcrumbs.splice(breadcrumbIndex + 1);
+    }
+  }
+
+  private getFormulaIdFromRoute() {
+    return this.activeRouter.snapshot.params['id'];
   }
 
 }

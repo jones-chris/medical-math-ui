@@ -1,6 +1,6 @@
 <app-nav-bar></app-nav-bar>
 
-<breadcrumb></breadcrumb>
+<app-breadcrumb></app-breadcrumb>
 
 <div id="formula-cards" class="app-component" *ngIf="formulaService.formulas">
   <ng-container *ngFor="let formula of formulaService.formulas">
@@ -9,7 +9,7 @@
       <mat-card-content>A description of the formula</mat-card-content>
       <mat-card-actions>
         <button class="btn btn-primary"
-                routerLink="/formulas/{{ formula.id }}"
+                [routerLink]="['/formulas', formula.id]"
                 [queryParams]="{formula:formula | json}"
                 [skipLocationChange]="true"
                 [appHideFormulaCards]="true">

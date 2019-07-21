@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import { FormulaService } from '../shared/services/formula.service';
+import {BreadcrumbService} from '../shared/services/breadcrumb.service';
 
 
 @Component({
@@ -8,7 +9,16 @@ import { FormulaService } from '../shared/services/formula.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  constructor(private formulaService: FormulaService) {}
+  constructor(private _formulaService: FormulaService,
+              private _breadcrumbService: BreadcrumbService) {}
+
+  get formulaService(): FormulaService {
+    return this._formulaService;
+  }
+
+  get breadcrumbService(): BreadcrumbService {
+    return this._breadcrumbService;
+  }
 
   ngOnInit() {
     if (this.formulaService.formulas.length === 0) {

@@ -11,16 +11,12 @@ import { FormulaComponent } from './formula/formula.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { ClipboardModule } from 'ngx-clipboard';
 import {ToggleFormulaCardsDirective} from '../shared/directives/toggle.formula.cards';
-import {BreadcrumbModule} from 'angular-crumbs';
+import {BreadcrumbService} from '../shared/services/breadcrumb.service';
+import {BreadcrumbComponent} from './breadcrumb/breadcrumb.component';
 
 const routes: Routes = [
-  {
-    path: 'formulas/:id',
-    component: FormulaComponent,
-    data: {
-      breadcrumb: 'Formula'
-    }
-  }
+  // { path: '', component: AppComponent },
+  { path: 'formulas/:id', component: FormulaComponent },
 ];
 
 @NgModule({
@@ -28,7 +24,8 @@ const routes: Routes = [
     AppComponent,
     FormulaComponent,
     NavBarComponent,
-    ToggleFormulaCardsDirective
+    ToggleFormulaCardsDirective,
+    BreadcrumbComponent
   ],
   imports: [
     BrowserModule,
@@ -37,14 +34,12 @@ const routes: Routes = [
     MatIconModule,
     RouterModule.forRoot(routes),
     MatCardModule,
-    ClipboardModule,
-    BreadcrumbModule
+    ClipboardModule
   ],
   providers: [
-  	FormulaService
+    FormulaService,
+    BreadcrumbService
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-	
-}
+export class AppModule {}

@@ -13,6 +13,7 @@
   <!--First, if the child formula has a parent-->
   <mat-icon *ngIf="formula.parentId"
             (click)="navigateToParentFormula(formula.parentId)"
+            [appUpdateBreadcrumbs]=formula.parentId
             class="cursor-pointer upward-arrow">
     arrow_upward
   </mat-icon>
@@ -56,6 +57,7 @@
       <td>
         <mat-icon *ngIf="childFormula.hasChildren"
                   (click)="navigateToChildFormula(childFormula.id)"
+                  [appUpdateBreadcrumbs]=childFormula.id
                   class="cursor-pointer">
           arrow_downward
         </mat-icon>
@@ -63,9 +65,21 @@
     </tr>
   </table>
 
-  <button class="btn btn-primary"
+  <!--Button if the formula has a parent id.  Breadcrumbs will be updated when button is clicked.-->
+  <button *ngIf="formula.parentId"
+          class="btn btn-primary"
+          (click)="calculate(); navigateToParentFormula(formula.parentId)"
+          [appUpdateBreadcrumbs]=formula.parentId>
+    Calculate
+  </button>
+
+  <!--Button if the formula does not have a parent id.  Breadcrumbs will NOT be updated when button is clicked.-->
+  <button *ngIf="!formula.parentId"
+          class="btn btn-primary"
           (click)="calculate(); navigateToParentFormula(formula.parentId)">
     Calculate
   </button>
+
+
 
 </div>

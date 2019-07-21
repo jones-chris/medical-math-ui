@@ -10,6 +10,7 @@
       <mat-card-actions>
         <button class="btn btn-primary"
                 [routerLink]="['/formulas', formula.id]"
+                [appUpdateBreadcrumbs]=formula.id
                 [queryParams]="{formula:formula | json}"
                 [skipLocationChange]="true"
                 [appHideFormulaCards]="true">

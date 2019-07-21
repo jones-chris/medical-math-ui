@@ -1,14 +1,14 @@
 <nav aria-label="breadcrumb" *ngIf="refAppComponent.breadcrumbService.breadcrumbs.length > 0">
   <ol class="breadcrumb">
 
-    <li class="breadcrumb-item" routerLink="" [appHideFormulaCards]="false">
+    <li class="breadcrumb-item" routerLink="" [appHideFormulaCards]="false" [appUpdateBreadcrumbs]="">
       Home
     </li>
 
     <li *ngFor="let crumb of refAppComponent.breadcrumbService.breadcrumbs; let i = index;"
         class="breadcrumb-item"
         [ngClass]="{'active': i === refAppComponent.breadcrumbService.breadcrumbs.length - 1}">
-      {{ crumb }}
+      {{ crumb.name }}
     </li>
 
   </ol>

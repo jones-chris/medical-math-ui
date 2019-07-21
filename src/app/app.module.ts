@@ -13,9 +13,9 @@ import { ClipboardModule } from 'ngx-clipboard';
 import {ToggleFormulaCardsDirective} from '../shared/directives/toggle.formula.cards';
 import {BreadcrumbService} from '../shared/services/breadcrumb.service';
 import {BreadcrumbComponent} from './breadcrumb/breadcrumb.component';
+import {UpdateBreadcrumbsDirective} from '../shared/directives/update.breadcrumbs';
 
 const routes: Routes = [
-  // { path: '', component: AppComponent },
   { path: 'formulas/:id', component: FormulaComponent },
 ];
 
@@ -25,7 +25,8 @@ const routes: Routes = [
     FormulaComponent,
     NavBarComponent,
     ToggleFormulaCardsDirective,
-    BreadcrumbComponent
+    BreadcrumbComponent,
+    UpdateBreadcrumbsDirective
   ],
   imports: [
     BrowserModule,

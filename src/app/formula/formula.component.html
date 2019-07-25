@@ -1,15 +1,24 @@
+<nav aria-label="breadcrumb" *ngIf="refAppComponent.breadcrumbService.breadcrumbs.length > 0">
+  <ol class="breadcrumb">
+
+    <li class="breadcrumb-item cursor-pointer" routerLink="" [appHideFormulaCards]="false" [appUpdateBreadcrumbs]="">
+      Home
+    </li>
+
+    <li *ngFor="let crumb of refAppComponent.breadcrumbService.breadcrumbs; let i = index;"
+        class="breadcrumb-item cursor-pointer"
+        [ngClass]="{'active': i === refAppComponent.breadcrumbService.breadcrumbs.length - 1}"
+        (click)="navigateToParentFormula(formula.parentId)"
+        [appUpdateBreadcrumbs]=crumb.formula.id
+        [position]="crumb.position">
+      {{ crumb.formula.name }}
+    </li>
+
+  </ol>
+</nav>
+
 <div>
-
   <br>
-
-  <button routerLink="/"
-          class="btn btn-success"
-          [appHideFormulaCards]="false">
-    Main Page
-  </button>
-
-  <br>
-
   <!--First, if the child formula has a parent-->
   <mat-icon *ngIf="formula.parentId"
             (click)="navigateToParentFormula(formula.parentId)"
@@ -17,13 +26,9 @@
             class="cursor-pointer upward-arrow">
     arrow_upward
   </mat-icon>
-
   <br>
-
   <b class="formula-name">{{ formula.name }} ( {{ formula.abbreviation }} )</b>
-
   <br>
-
   <div>
     <p [hidden]="hideResult"
        id="result">
@@ -40,9 +45,7 @@
       Copied to Clipboard!
     </p>
   </div>
-
   <p [hidden]="!errorMessage">{{ errorMessage }}</p>
-
   <table>
     <tr *ngFor="let childFormula of formula.childFormulas">
       <td>
@@ -50,6 +53,7 @@
       </td>
       <td>
         <input id="{{ childFormula.id }}"
+               class="border-info"
                type="number"
                [(ngModel)]="childFormula.value"
         />
@@ -64,7 +68,6 @@
       </td>
     </tr>
   </table>
-
   <!--Button if the formula has a parent id.  Breadcrumbs will be updated when button is clicked.-->
   <button *ngIf="formula.parentId"
           class="btn btn-primary"
@@ -79,7 +82,4 @@
           (click)="calculate(); navigateToParentFormula(formula.parentId)">
     Calculate
   </button>
-
-
-
 </div>

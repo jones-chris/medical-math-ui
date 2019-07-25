@@ -4,6 +4,10 @@
   border-color: #e7e7e7;
 }
 
+.cursor-pointer {
+  cursor: pointer;
+}
+
 div {
   text-align: center;
 }

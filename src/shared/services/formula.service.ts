@@ -3,39 +3,40 @@ import { Http } from '@angular/http';
 
 import { Formula } from '../models/formula.model';
 import {map} from 'rxjs/operators';
+import {environment} from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FormulaService {
-  private url = 'http://localhost:5000/formulas';
+  // private url = 'http://localhost:5000/formulas';
   public formulas: Formula[] = [];
 
   constructor(private http: Http) { }
 
-  getFormulas() {
-    return this.http.get(this.url)
+  getFormulasRemotely() {
+    return this.http.get(environment.apiUrl)
       .pipe(map(response => response.json()));
   }
 
-  getChildFormulas(formulaId: number) {
-    return this.http.get(this.url + '/' + formulaId)
+  getChildFormulasRemotely(formulaId: number) {
+    return this.http.get(environment.apiUrl + '/' + formulaId)
       .pipe(map(response => response.json()));
   }
 
-  getChildFormulaById(formulaId: number): Formula {
+  getChildFormulaByIdLocally(formulaId: number): Formula {
     for (const formula of this.formulas) {
-      if (formula.id === formulaId) {
+      if (formula.id === +formulaId) {
         return formula;
       }
     }
     return null;
   }
 
-  getChildFormulasByParentId(formulaId: number): Formula[] {
+  getChildFormulasByParentIdLocally(formulaId: number): Formula[] {
     const childFormulas = [];
     for (const formula of this.formulas) {
-      if (formula.parentId === formulaId) {
+      if (formula.parentId === +formulaId) {
         childFormulas.push(formula);
       }
     }

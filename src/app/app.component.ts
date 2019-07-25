@@ -27,7 +27,7 @@ export class AppComponent implements OnInit {
   }
 
   getFormulas() {
-    this.formulaService.getFormulas()
+    this.formulaService.getFormulasRemotely()
       .subscribe(formulas => {
         this.formulaService.formulas = formulas;
         console.log('Initial formulas are:  ' + formulas);

@@ -40,7 +40,7 @@ export class FormulaComponent implements OnInit {
     // first check if child formulas exist in refAppComponent
     // if yes, then assign to formula.childFormulas
     // if no, then get from flask api and update the master list of formulas in refAppComponent
-    const childFormulas = this.formulaService.getChildFormulasByParentId(this.formula.id);
+    const childFormulas = this.formulaService.getChildFormulasByParentIdLocally(this.formula.id);
     if (childFormulas.length > 0) {
       this.formula.childFormulas = childFormulas;
     } else {
@@ -79,21 +79,20 @@ export class FormulaComponent implements OnInit {
 
   navigateToParentFormula(parentFormulaId: number) {
     if (parentFormulaId) {
-      // this.formula = this.refAppComponent.formulas.find((formula) => formula.id === parentFormulaId);
       this.formula = this.formulaService.formulas.find((formula) => formula.id === parentFormulaId);
 
       // Only call service when going DOWN formula tree, NOT UP.
-      this.formula.childFormulas = this.formulaService.getChildFormulasByParentId(parentFormulaId);
+      this.formula.childFormulas = this.formulaService.getChildFormulasByParentIdLocally(parentFormulaId);
 
       this.hideUiMessages();
     }
   }
 
   navigateToChildFormula(formulaId: number) {
-    this.formula = this.formulaService.getChildFormulaById(formulaId);
+    this.formula = this.formulaService.getChildFormulaByIdLocally(formulaId);
     if (this.formula.hasChildren) {
       // first try getting child formulas form refAppComponent
-      this.formula.childFormulas = this.formulaService.getChildFormulasByParentId(formulaId);
+      this.formula.childFormulas = this.formulaService.getChildFormulasByParentIdLocally(formulaId);
 
       // if no child formulas found locally, then get them from the service (we know there should be at least 1 child because hasChildren
       // is true.
@@ -111,7 +110,7 @@ export class FormulaComponent implements OnInit {
   }
 
   private getChildFormulas(formulaId: number) {
-    this.formulaService.getChildFormulas(formulaId)
+    this.formulaService.getChildFormulasRemotely(formulaId)
       .subscribe(childFormulas => {
 
         // Update this component's formula with childFormulas

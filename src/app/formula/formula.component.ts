@@ -30,22 +30,25 @@ export class FormulaComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.activeRouter.queryParams.subscribe(queryParams => {
-      const formulaJson = queryParams.formula;
-      this.formula = JSON.parse(formulaJson) as Formula;
-      this.hideResult = true;
-      this.hideCopyMessage = true;
-    });
+        this.activeRouter.queryParams.subscribe(queryParams => {
+            const formulaJson = queryParams.formula;
+            this.formula = JSON.parse(formulaJson) as Formula;
+            this.hideResult = true;
+            this.hideCopyMessage = true;
+        });
 
     // first check if child formulas exist in refAppComponent
     // if yes, then assign to formula.childFormulas
     // if no, then get from flask api and update the master list of formulas in refAppComponent
-    const childFormulas = this.formulaService.getChildFormulasByParentIdLocally(this.formula.id);
-    if (childFormulas.length > 0) {
-      this.formula.childFormulas = childFormulas;
-    } else {
-      this.getChildFormulas(this.formula.id);
-    }
+    // const childFormulas = this.formulaService.getChildFormulasByParentIdLocally(this.formula.id);
+    // if (childFormulas.length > 0) {
+    //   this.formula.childFormulas = childFormulas;
+    // } else {
+    //   this.getChildFormulas(this.formula.id);
+    // }
+        if (this.formula.hasChildren) {
+            this.getChildFormulas(this.formula.id);
+        }
   }
 
   calculate() {
@@ -70,7 +73,7 @@ export class FormulaComponent implements OnInit {
     // assign return value to formula's value in object model
     this.formula.value = func.apply(this, args);
 
-    if (this.formula.parentId === null) {
+    if (this.formula.id === this.refAppComponent.firstParentFormulaId) {
       this.result = this.formula.value;
       this.errorMessage = null;
       this.hideResult = false;

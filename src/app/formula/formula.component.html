@@ -19,8 +19,10 @@
 
 <div>
   <br>
-  <!--First, if the child formula has a parent-->
-  <mat-icon *ngIf="formula.parentId"
+    <!--First, if the child formula has a parent AND the formula id is different from the first parent formula id-->
+    <!--Thus, if the formula id matches the firstParentFormulaId, then we know we are at the top of the formula tree-->
+    <!--and should not display an upward arrow because there is no higher formula in the tree.-->
+  <mat-icon *ngIf="formula.parentId && formula.id !== refAppComponent.firstParentFormulaId"
             (click)="navigateToParentFormula(formula.parentId)"
             [appUpdateBreadcrumbs]=formula.parentId
             class="cursor-pointer upward-arrow">
@@ -69,17 +71,18 @@
     </tr>
   </table>
   <!--Button if the formula has a parent id.  Breadcrumbs will be updated when button is clicked.-->
-  <button *ngIf="formula.parentId"
-          class="btn btn-primary"
-          (click)="calculate(); navigateToParentFormula(formula.parentId)"
-          [appUpdateBreadcrumbs]=formula.parentId>
-    Calculate
-  </button>
+    <button *ngIf="formula.id !== refAppComponent.firstParentFormulaId"
+            class="btn btn-primary"
+            (click)="calculate(); navigateToParentFormula(formula.parentId)"
+            [appUpdateBreadcrumbs]=formula.parentId>
+        Calculate
+    </button>
 
-  <!--Button if the formula does not have a parent id.  Breadcrumbs will NOT be updated when button is clicked.-->
-  <button *ngIf="!formula.parentId"
-          class="btn btn-primary"
-          (click)="calculate(); navigateToParentFormula(formula.parentId)">
-    Calculate
-  </button>
+    <!--Button if the formula does not have a parent id.  Breadcrumbs will NOT be updated when button is clicked.-->
+    <button *ngIf="formula.id === refAppComponent.firstParentFormulaId"
+            class="btn btn-primary"
+            (click)="calculate()">
+        Calculate
+    </button>
+
 </div>

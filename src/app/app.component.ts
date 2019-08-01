@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import { FormulaService } from '../shared/services/formula.service';
 import {BreadcrumbService} from '../shared/services/breadcrumb.service';
+import {ActivatedRoute, Router} from '@angular/router';
+import {Utils} from '../shared/utils/utils';
 
 
 @Component({
@@ -9,28 +11,50 @@ import {BreadcrumbService} from '../shared/services/breadcrumb.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  constructor(private _formulaService: FormulaService,
-              private _breadcrumbService: BreadcrumbService) {}
+    private emptySearchMessage: string;
+    public firstParentFormulaId: number;
 
-  get formulaService(): FormulaService {
-    return this._formulaService;
-  }
+    constructor(private _formulaService: FormulaService,
+                private _breadcrumbService: BreadcrumbService,
+                private router: Router,
+                private activatedRoute: ActivatedRoute) {}
 
-  get breadcrumbService(): BreadcrumbService {
-    return this._breadcrumbService;
-  }
-
-  ngOnInit() {
-    if (this.formulaService.formulas.length === 0) {
-      this.getFormulas();
+    get formulaService(): FormulaService {
+        return this._formulaService;
     }
-  }
 
-  getFormulas() {
-    this.formulaService.getFormulasRemotely()
-      .subscribe(formulas => {
-        this.formulaService.formulas = formulas;
-        console.log('Initial formulas are:  ' + formulas);
-      });
-  }
+    get breadcrumbService(): BreadcrumbService {
+        return this._breadcrumbService;
+    }
+
+    setFirstParentFormulaId(value) {
+        this.firstParentFormulaId = +value;
+    }
+
+    ngOnInit() {
+        if (this.formulaService.formulas.length === 0) {
+            this.getFormulas();
+        }
+    }
+
+    private getFormulas() {
+        this.formulaService.getFormulasRemotely()
+            .subscribe(formulas => {
+                this.formulaService.formulas = formulas;
+            });
+    }
+
+    public getFormulasBySearch(event) {
+        const searchText = event.currentTarget.value;
+        this.formulaService.getFormulasBySearch(searchText)
+            .subscribe(formulas => {
+                if (formulas.length === 0) {
+                    this.emptySearchMessage = 'Sorry!  I could not find a matching formula!';
+                } else {
+                    this.formulaService.formulas = formulas;
+                    this.router.navigateByUrl('');
+                    Utils.hideFormulaCards(false);
+                }
+            });
+    }
 }

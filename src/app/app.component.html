@@ -1,7 +1,5 @@
 <app-nav-bar></app-nav-bar>
 
-<!--<app-breadcrumb></app-breadcrumb>-->
-
 <div id="formula-cards" class="app-component" *ngIf="formulaService.formulas">
   <ng-container *ngFor="let formula of formulaService.formulas">
     <mat-card *ngIf="formula.hasChildren">
@@ -13,7 +11,8 @@
                 [appUpdateBreadcrumbs]=formula.id
                 [queryParams]="{formula:formula | json}"
                 [skipLocationChange]="true"
-                [appHideFormulaCards]="true">
+                [appHideFormulaCards]="true"
+                (click)="setFirstParentFormulaId(formula.id)">
           View
         </button>
       </mat-card-actions>

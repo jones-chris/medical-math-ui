@@ -4,12 +4,12 @@ import { Http } from '@angular/http';
 import { Formula } from '../models/formula.model';
 import {map} from 'rxjs/operators';
 import {environment} from '../../environments/environment';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class FormulaService {
-  // private url = 'http://localhost:5000/formulas';
   public formulas: Formula[] = [];
 
   constructor(private http: Http) { }
@@ -42,6 +42,11 @@ export class FormulaService {
     }
 
     return childFormulas;
+  }
+
+  getFormulasBySearch(searchText: string): Observable<Formula[]> {
+      return this.http.get(`${environment.apiUrl}?search=${searchText}`)
+          .pipe(map(response => response.json()));
   }
 
 }

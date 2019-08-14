@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {Formula} from '../../shared/models/formula.model';
-import {ActivatedRoute, NavigationStart, Router} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {AppComponent} from '../app.component';
 import {FormulaService} from '../../shared/services/formula.service';
 import {ClipboardService} from 'ngx-clipboard';
@@ -29,7 +29,7 @@ export class FormulaComponent implements OnInit {
     return this._refAppComponent;
   }
 
-  ngOnInit() {
+    ngOnInit() {
         this.activeRouter.queryParams.subscribe(queryParams => {
             const formulaJson = queryParams.formula;
             this.formula = JSON.parse(formulaJson) as Formula;
@@ -37,19 +37,27 @@ export class FormulaComponent implements OnInit {
             this.hideCopyMessage = true;
         });
 
-    // first check if child formulas exist in refAppComponent
-    // if yes, then assign to formula.childFormulas
-    // if no, then get from flask api and update the master list of formulas in refAppComponent
-    // const childFormulas = this.formulaService.getChildFormulasByParentIdLocally(this.formula.id);
-    // if (childFormulas.length > 0) {
-    //   this.formula.childFormulas = childFormulas;
-    // } else {
-    //   this.getChildFormulas(this.formula.id);
-    // }
+        // first check if child formulas exist in refAppComponent
+        // if yes, then assign to formula.childFormulas
+        // if no, then get from flask api and update the master list of formulas in refAppComponent
         if (this.formula.hasChildren) {
-            this.getChildFormulas(this.formula.id);
+            // check if there are any formulas with parent id of this.formula.
+            const localChildFormulas = [];
+            this.formulaService.formulas.forEach((childFormula) => {
+                if (childFormula.parentId === this.formula.id) {
+                    localChildFormulas.push(childFormula);
+                }
+            });
+
+            if (localChildFormulas.length === 0) {
+                // if no, then get child formulas remotely.
+                this.getChildFormulas(this.formula.id);
+            } else {
+                // if yes, then add those to this.formula.
+                this.formula.childFormulas = localChildFormulas;
+            }
         }
-  }
+    }
 
   calculate() {
     // values are written to object model via 2-way data binding, so just get value from object model (formula field)

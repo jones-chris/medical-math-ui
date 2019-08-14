@@ -53,6 +53,7 @@ export class AppComponent implements OnInit {
                 } else {
                     this.formulaService.formulas = formulas;
                     this.router.navigateByUrl('');
+                    this.breadcrumbService.breadcrumbs.splice(0);
                     Utils.hideFormulaCards(false);
                 }
             });

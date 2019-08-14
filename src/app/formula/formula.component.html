@@ -22,14 +22,28 @@
     <!--First, if the child formula has a parent AND the formula id is different from the first parent formula id-->
     <!--Thus, if the formula id matches the firstParentFormulaId, then we know we are at the top of the formula tree-->
     <!--and should not display an upward arrow because there is no higher formula in the tree.-->
-  <mat-icon *ngIf="formula.parentId && formula.id !== refAppComponent.firstParentFormulaId"
-            (click)="navigateToParentFormula(formula.parentId)"
-            [appUpdateBreadcrumbs]=formula.parentId
-            class="cursor-pointer upward-arrow">
-    arrow_upward
-  </mat-icon>
+  <!--<mat-icon *ngIf="formula.parentId && formula.id !== refAppComponent.firstParentFormulaId"-->
+            <!--(click)="navigateToParentFormula(formula.parentId)"-->
+            <!--[appUpdateBreadcrumbs]=formula.parentId-->
+            <!--class="cursor-pointer upward-arrow">-->
+    <!--arrow_upward-->
+  <!--</mat-icon>-->
   <br>
-  <b class="formula-name">{{ formula.name }} ( {{ formula.abbreviation }} )</b>
+
+    <ng-container *ngIf="formula.parentId && formula.id !== refAppComponent.firstParentFormulaId">
+        <b (click)="navigateToParentFormula(formula.parentId)"
+           [appUpdateBreadcrumbs]=formula.parentId
+            class="formula-name cursor-pointer">
+            {{ formula.name }} ( {{ formula.abbreviation }} )
+        </b>
+    </ng-container>
+    <ng-container *ngIf="!formula.parentId && formula.id === refAppComponent.firstParentFormulaId">
+        <b
+            class="formula-name">
+            {{ formula.name }} ( {{ formula.abbreviation }} )
+        </b>
+    </ng-container>
+
   <br>
   <div>
     <p [hidden]="hideResult"
@@ -50,24 +64,38 @@
   <p [hidden]="!errorMessage">{{ errorMessage }}</p>
   <table>
     <tr *ngFor="let childFormula of formula.childFormulas">
-      <td>
-        {{ childFormula.name }}
-      </td>
-      <td>
-        <input id="{{ childFormula.id }}"
-               class="border-info"
-               type="number"
-               [(ngModel)]="childFormula.value"
-        />
-      </td>
-      <td>
-        <mat-icon *ngIf="childFormula.hasChildren"
-                  (click)="navigateToChildFormula(childFormula.id)"
-                  [appUpdateBreadcrumbs]=childFormula.id
-                  class="cursor-pointer">
-          arrow_downward
-        </mat-icon>
-      </td>
+        <!--<td>-->
+            <!--<mat-icon *ngIf="childFormula.hasChildren"-->
+                      <!--(click)="navigateToChildFormula(childFormula.id)"-->
+                      <!--[appUpdateBreadcrumbs]=childFormula.id-->
+                      <!--class="cursor-pointer">-->
+                <!--arrow_downward-->
+            <!--</mat-icon>-->
+        <!--</td>-->
+        <td>
+            <!--If the child formula has children, then allow drill down.-->
+            <ng-container *ngIf="childFormula.hasChildren">
+                <p [appUpdateBreadcrumbs]="childFormula.id"
+                   (click)="navigateToChildFormula(childFormula.id)"
+                   class="cursor-pointer">
+                    {{ childFormula.name }}
+                </p>
+            </ng-container>
+            <!--If the child formula does NOT have children, then DO NOT allow drill down.-->
+            <ng-container *ngIf="! childFormula.hasChildren">
+                <p>
+                    {{ childFormula.name }}
+                </p>
+            </ng-container>
+
+        </td>
+        <td>
+          <input id="{{ childFormula.id }}"
+                 class="border-info"
+                 type="number"
+                 [(ngModel)]="childFormula.value"
+          />
+        </td>
     </tr>
   </table>
   <!--Button if the formula has a parent id.  Breadcrumbs will be updated when button is clicked.-->

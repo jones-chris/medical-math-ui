@@ -12,11 +12,11 @@ import {BreadcrumbService} from '../../shared/services/breadcrumb.service';
   styleUrls: ['./formula.component.css']
 })
 export class FormulaComponent implements OnInit {
-  private formula: Formula;
-  private hideResult = true;
-  private hideCopyMessage = true;
-  private result: number;
-  private errorMessage: string;
+  public formula: Formula;
+  public hideResult = true;
+  public hideCopyMessage = true;
+  public result: number;
+  public errorMessage: string;
 
   constructor(private activeRouter: ActivatedRoute,
               private router: Router,
